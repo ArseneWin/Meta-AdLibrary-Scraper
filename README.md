@@ -6,6 +6,19 @@ This repository contains two tools built for different purposes. Both use the sa
 
 ---
 
+## Research
+
+The `india-finads-risk-check` tool was developed as part of the following report:
+
+**[Money from Misery: How Meta Profits from & Exposes Indians to Scams](https://www.bard.edu/wwwmedia/files/6710304/1/Money%20from%20MiseryFinal%20v1.pdf)**
+*Hamza Farooqui & Inayat Sabhikhi — April 2026*
+
+Published in association with [Ekō](https://www.eko.org/), [Bard Human Rights Project](https://hrp.bard.edu/), and [Forum for Developing Communities](https://forumdc.org).
+
+The report investigates how Meta profits from fraudulent investment advertising in India, tests compliance with SEBI's advertiser verification requirements, and finds that 97% of financial advertisers on Meta are unregistered entities. The scraping tool in this repository was used to collect and analyse the advertising data underpinning those findings.
+
+---
+
 ## Tools at a glance
 
 | | [simple-scraper](./simple-scraper/) | [india-finads-risk-check](./india-finads-risk-check/) |
