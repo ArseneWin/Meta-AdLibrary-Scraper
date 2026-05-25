@@ -15,7 +15,7 @@ The `india-finads-risk-check` tool was developed as part of the following report
 
 Published in association with [Ekō](https://www.eko.org/), [Bard Human Rights Project](https://hrp.bard.edu/), and [Forum for Developing Communities](https://forumdc.org).
 
-The report investigates how Meta profits from fraudulent investment advertising in India, tests compliance with SEBI's advertiser verification requirements, and finds that 97% of financial advertisers on Meta are unregistered entities. The scraping tool in this repository was used to collect and analyse the advertising data underpinning those findings.
+The report critically examined Meta’s complicity in profiteering from harmful advertisement scams in contravention of Indian regulations, tested compliance with SEBI's advertiser verification requirements, and found that 97% of financial advertisers on Meta are unregistered entities. The scraping tool in this repository was used to collect and analyse the advertising data underpinning those findings.
 
 ---
 
