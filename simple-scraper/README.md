@@ -1,72 +1,115 @@
-# meta-adlib-scraper
+# simple-scraper
 
-A collection of tools for scraping Facebook's public Ad Library.
+A straightforward tool to search Facebook's public Ad Library by keyword and save the results to CSV.
 
-This repository contains two tools built for different purposes. Both use the same underlying approach — automating a Chrome browser to collect ad data from [Facebook's Ad Library](https://www.facebook.com/ads/library/) — but they differ significantly in scope and output.
+No risk scoring. No regulatory checks. Just ads.
+
+> Part of the [meta-adlib-scraper](../) repository. Looking for the India financial ads + SEBI version? See [india-finads-risk-check](../india-finads-risk-check/).
+>
+> This tool was built alongside research into financial ad scams in India. See the report: [Money from Misery: How Meta Profits from & Exposes Indians to Scams](https://www.bard.edu/wwwmedia/files/6710304/1/Money%20from%20MiseryFinal%20v1.pdf) by Hamza Farooqui & Inayat Sabhikhi (April 2026), published in association with [Ekō](https://www.eko.org/), [Bard Human Rights Project](https://hrp.bard.edu/), and [Forum for Developing Communities](https://forumdc.org).
 
 ---
 
-## Tools at a glance
+## What it does
 
-| | [simple-scraper](./simple-scraper/) | [india-finads-risk-check](./india-finads-risk-check/) |
+1. Takes a list of keywords from you
+2. Opens Facebook's Ad Library in a Chrome browser (automatically)
+3. Scrolls through results for each keyword
+4. Collects ad data — page name, ad text, platforms, dates, spend, audience size, page link
+5. Saves everything to a CSV you can open in Excel
+
+---
+
+## Setup
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Make sure you also have Chrome and a matching [ChromeDriver](https://chromedriver.chromium.org/downloads) installed.
+
+---
+
+## Usage
+
+### Pass keywords directly
+
+```bash
+python scraper.py --keywords "solar panels" "electric vehicles" "online courses"
+```
+
+### Use a keywords file
+
+Edit `keywords.txt` (one keyword per line), then run:
+
+```bash
+python scraper.py --keywords-file keywords.txt
+```
+
+### All options
+
+| Option | What it does | Default |
 |---|---|---|
-| **Purpose** | General-purpose ad collection | Financial ad monitoring for India |
-| **Who it's for** | Anyone who wants ad data for any topic | Researchers and regulators tracking investment advertising |
-| **Keywords** | You provide any keywords you like | Pre-built list of investment/trading-related terms |
-| **Country** | Configurable (any country) | India (`IN`) focused |
-| **Risk scoring** | ✗ | ✓ Scores ads LOW / MEDIUM / HIGH / CRITICAL |
-| **SEBI check** | ✗ | ✓ Cross-references advertisers against SEBI's database |
-| **Output** | Clean CSV with core ad fields | CSV with 50+ fields including risk and regulatory data |
-| **Complexity** | Single file, minimal setup | Multi-file system with async processing |
+| `--country XX` | Two-letter country code | `IN` (India) |
+| `--max-scrolls N` | How far to scroll per keyword | `50` |
+| `--start-date YYYY-MM-DD` | Only return ads started after this date | Last 30 days |
+| `--output-dir PATH` | Folder to save results | `results/` |
+| `--headless` | Run browser invisibly | Off |
+| `--resume` | Skip keywords already completed in a previous run | Off |
+| `--fresh-start` | Ignore previous progress and restart | Off |
 
----
+### Examples
 
-## Which one should I use?
+```bash
+# Search in the US
+python scraper.py --keywords "weight loss" --country US
 
-**Use `simple-scraper` if you want to:**
-- Collect ads on any topic (products, services, campaigns, competitors, etc.)
-- Work in any country
-- Get a clean, straightforward CSV without extra analysis
+# Run invisibly, custom output folder
+python scraper.py --keywords-file keywords.txt --headless --output-dir my_data
 
-**Use `india-finads-risk-check` if you want to:**
-- Monitor financial and investment advertising on Facebook/Instagram in India
-- Automatically flag ads using high-risk or scam-like language
-- Check whether advertisers are registered with SEBI
-- Produce a research or compliance dataset
-
----
-
-## Repository structure
-
-```
-meta-adlib-scraper/
-├── README.md                        ← You are here
-├── simple-scraper/                  ← General-purpose scraper
-│   ├── README.md
-│   ├── scraper.py
-│   ├── keywords.txt
-│   ├── requirements.txt
-│   └── .gitignore
-└── india-finads-risk-check/         ← India financial ads + SEBI risk tool
-    ├── README.md
-    ├── enhanced_main.py
-    ├── main.py
-    ├── data_utils.py
-    ├── sebi.py
-    ├── sebi_enhanced.py
-    ├── demo.py
-    ├── enhanced_keywords.json
-    ├── requirements.txt
-    └── .gitignore
+# Resume an interrupted run
+python scraper.py --keywords-file keywords.txt --resume
 ```
 
 ---
 
-## Requirements (both tools)
+## Output
 
-- Python 3.9+
-- Google Chrome installed
-- ChromeDriver matching your Chrome version → [download here](https://chromedriver.chromium.org/downloads)
+Results are saved in the `results/` folder:
+
+- One CSV per keyword saved as it completes
+- A final `ALL_KEYWORDS_*.csv` combining everything
+
+### CSV columns
+
+| Column | Description |
+|---|---|
+| `Keyword` | The keyword that found this ad |
+| `Status` | Active or Inactive |
+| `Library_ID` | Facebook's unique ID for the ad |
+| `Ad_URL` | Direct link to the ad in Ad Library |
+| `Page_Name` | Name of the page that ran the ad |
+| `Page_Link` | Link to the advertiser's page |
+| `Ad_Text` | Body text of the ad |
+| `Platforms` | Facebook, Instagram, etc. |
+| `Start_Date` | When the ad started running |
+| `End_Date` | When it stopped (or "Still active") |
+| `Total_Active_Days` | How long it ran |
+| `Estimated_Audience` | Audience size range |
+| `Currency` | Currency of reported spend |
+| `Amount_Spent` | Spend range (e.g. ₹1,000 - ₹5,000) |
+| `Impressions` | Impression range |
+| `Scraped_At` | When this row was collected |
+
+---
+
+## Notes
+
+- The browser window will open and scroll automatically. Use `--headless` to run it in the background.
+- Results are saved every 10 scrolls, so data is not lost if the script is interrupted.
+- Facebook's Ad Library is public — no API key required.
 
 ---
 
