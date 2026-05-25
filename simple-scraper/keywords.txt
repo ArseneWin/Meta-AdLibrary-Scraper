@@ -1,0 +1,9 @@
+# Example keywords file — one keyword per line
+# Lines starting with # are ignored
+# Edit this file and run: python scraper.py --keywords-file keywords.txt
+
+solar panels
+electric vehicles
+online courses
+work from home
+real estate investment
